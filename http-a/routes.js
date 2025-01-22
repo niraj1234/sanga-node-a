@@ -8,6 +8,9 @@ const server = http.createServer((req,res) => {
     } else if(url === "/projects"){
         res.writeHead(200 , {"Content-Type":"text/plain"});
         res.end("Project List");
+    } else if(url === "/json"){
+        res.writeHead(200 , {"Content-Type":"application/json"});
+        res.end('{name:"John", age:31, city:"New York"}');
     } else {
         res.writeHead(404 , {"Content-Type":"text/plain"});
         res.end("Page not found.");
