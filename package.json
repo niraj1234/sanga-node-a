@@ -1,11 +1,12 @@
 {
   "dependencies": {
     "express": "^4.21.2",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "mongoose": "^8.9.5"
   },
   "name": "sangam-node-a",
   "version": "1.0.0",
-  "main": "app.js",
+  "main": "app-mongo.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
