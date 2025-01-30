@@ -62,18 +62,57 @@ const addNewBook = async ( req , res ) => {
 
 const updateBook = async (req,res) => {
     try {
-        
+        const bookIdToUpdate = req.params.id;
+        const updateBookData = req.body;
+        const updatedBook = await Book.findByIdAndUpdate(bookIdToUpdate , updateBookData ,{ new : true });
+
+        if(!updatedBook){
+            res.status(404).json({
+                success : false ,
+                message : 'Book not found with given id'
+            })
+        }else{
+            res.status(200).json({
+                success : true ,
+                message : 'Book updated successfully',
+                data : updatedBook
+            })
+        }
+
     } catch (error) {
         console.log("Error in book controller " + error);
+        res.status(500).json({
+            success : false ,
+            message : 'Something went wrong'
+        })
     }
 }
 
 
 const deleteBook = async (req,res) => {
     try {
+        const bookIdRequested = req.params.id;
+        const deletedBook = await Book.findByIdAndDelete(bookIdRequested);
+        if(!deletedBook){
+            res.status(404).json({
+                success : false ,
+                message : 'Book not found with given id'
+            })
+        }else{
+            res.status(200).json({
+                success : true ,
+                message : 'Book deleted successfully',
+                data : deletedBook
+            })
+        }
         
     } catch (error) {
         console.log("Error in book controller " + error);
+        res.status(500).json({
+            success : false ,
+            message : 'Something went wrong'
+        })
+
     }
 }
 
