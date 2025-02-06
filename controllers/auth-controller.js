@@ -95,5 +95,52 @@ const loginUser = async (req,res) => {
 }
 
 
-module.exports = {registerUser , loginUser}
+// change password, user must be logged is, 
+// Forgot password is having different implementation
+const changePassword = async (req,res) => {
+
+    try {
+        const userId = req.userInfo.userId;
+        const { oldPassword , newPassword } = req.body;
+        const userFromDB = await User.findById(userId);
+        if(!userFromDB){
+            return res.status(404).json({
+                success : false,
+                message : "No user found"
+            });
+        } 
+
+        const isPasswordMatch = await bcrypt.compare(oldPassword , userFromDB.password);
+        if(!isPasswordMatch){
+            return res.status(404).json({
+                success : false,
+                message : "Password not matched with provided oldPassword"
+            })
+        }
+
+        // hash the new password
+        const salt = await bcrypt.genSalt(10);
+        const newHashedPaaaword = await bcrypt.hash(newPassword,salt);
+        userFromDB.password = newHashedPaaaword;
+
+        userFromDB.save();
+
+        res.status(200).json({
+            success :true,
+            message : "User password updated successfully"
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            status : false,
+            message : 'Something went wrong on server | auth-controller > change password[]'
+        })
+    }
+}
+
+
+
+
+module.exports = {registerUser , loginUser , changePassword }
 
